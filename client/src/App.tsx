@@ -1,48 +1,115 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { useEffect, useState } from "react";
+import { BackendClass } from "@genezio-sdk/workshop1";
 import "./App.css";
 
-export default function App() {
-  const [name, setName] = useState("");
-  const [response, setResponse] = useState("");
+type LocationApiResponse =
+  | {
+      country?: string;
+      regionName?: string;
+      city?: string;
+    }
+  | string;
 
-  async function sayHello() {
-    setResponse("TODO: Not Implemented");
+export default function App() {
+  const [location, setLocation] = useState<LocationApiResponse>("no call");
+  const [cats, setCats] = useState("");
+  const [buttonColor1, setButtonColor1] = useState("black");
+  const [buttonColor2, setButtonColor2] = useState("black");
+  const [buttonColor3, setButtonColor3] = useState("black");
+
+  const colorsArray = ["red", "blue", "yellow", "green", "purple", "orange"];
+
+  async function CallLocationApi() {
+    const res = await BackendClass.handleCall();
+    setLocation(res);
   }
 
-  return (
-    <>
-      <div>
-        <a href="https://genezio.com" target="_blank">
-          <img
-            src="https://raw.githubusercontent.com/Genez-io/graphics/main/svg/Logo_Genezio_White.svg"
-            className="logo genezio light"
-            alt="Genezio Logo"
-          />
-          <img
-            src="https://raw.githubusercontent.com/Genez-io/graphics/main/svg/Logo_Genezio_Black.svg"
-            className="logo genezio dark"
-            alt="Genezio Logo"
-          />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Genezio + React = ❤️</h1>
-      <div className="card">
-        <input
-          type="text"
-          className="input-box"
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-        />
-        <br />
-        <br />
+  async function CallCatsApi() {
+    const res = await BackendClass.handleCats();
+    setCats(res);
+  }
 
-        <button onClick={() => sayHello()}>Say Hello</button>
-        <p className="read-the-docs">{response}</p>
+  useEffect(() => {
+    CallCatsApi();
+  }, []);
+
+  const changeButton1 = () => {
+    setButtonColor1("green");
+  };
+
+  const changeButton2 = () => {
+    const randomIndex = Math.floor(Math.random() * colorsArray.length);
+    setButtonColor2(colorsArray[randomIndex]);
+  };
+
+  const changeButton3 = () => {
+    const currentColor = buttonColor3;
+    let newColor = currentColor;
+    while (newColor === currentColor) {
+      newColor = colorsArray[Math.floor(Math.random() * colorsArray.length)];
+    }
+    setButtonColor3(newColor);
+  };
+
+  return (
+    <div>
+      <h1 style={{ marginBottom: "4rem" }}>Workshop 1</h1>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "1rem",
+          marginBottom: "3rem",
+        }}
+      >
+        <button
+          onClick={changeButton1}
+          style={{ backgroundColor: buttonColor1 }}
+        >
+          Change background
+        </button>
+        <button
+          onClick={changeButton2}
+          style={{ backgroundColor: buttonColor2 }}
+        >
+          Change from array
+        </button>
+        <button
+          onClick={changeButton3}
+          style={{ backgroundColor: buttonColor3 }}
+        >
+          Change random from array
+        </button>
       </div>
-    </>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      ></div>
+      <img width={250} height={250} src={cats} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "1rem",
+        }}
+      >
+        <button onClick={() => CallCatsApi()}> Change cat photo</button>
+      </div>
+      <div className="card">
+        <button onClick={() => CallLocationApi()}>Call location api</button>
+        <p>
+          Country: {typeof location === "string" ? location : location.country}
+        </p>
+        <p>
+          Region:{" "}
+          {typeof location === "string" ? location : location.regionName}
+        </p>
+        <p>City: {typeof location === "string" ? location : location.city}</p>
+      </div>
+    </div>
   );
 }
