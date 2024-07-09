@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { BackendClass } from "@genezio-sdk/workshop1";
 import "./App.css";
 
-type LocationApiResponse =
-  | {
-      country?: string;
-      regionName?: string;
-      city?: string;
-    }
-  | string;
+type LocationApiResponse = {
+  country?: string;
+  regionName?: string;
+  city?: string;
+};
 
 export default function App() {
-  const [location, setLocation] = useState<LocationApiResponse>("no call");
+  const [location, setLocation] = useState<LocationApiResponse>({});
   const [cats, setCats] = useState("");
   const [buttonColor1, setButtonColor1] = useState("black");
   const [buttonColor2, setButtonColor2] = useState("black");
@@ -101,14 +99,9 @@ export default function App() {
       </div>
       <div className="card">
         <button onClick={() => CallLocationApi()}>Call location api</button>
-        <p>
-          Country: {typeof location === "string" ? location : location.country}
-        </p>
-        <p>
-          Region:{" "}
-          {typeof location === "string" ? location : location.regionName}
-        </p>
-        <p>City: {typeof location === "string" ? location : location.city}</p>
+        <p>Country: {location.country || "no call"}</p>
+        <p>Region: {location.regionName || "no call"}</p>
+        <p>City: {location.city || "no call"}</p>
       </div>
     </div>
   );
