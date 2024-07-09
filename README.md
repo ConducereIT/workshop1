@@ -1,5 +1,8 @@
 # Workshop 1
 
+## Link to hosted project
+https://sapphire-rainy-flea.app.genez.io/
+
 ## Prerequisites
 
 If you don't already have them, you'll need to install the following tools:
