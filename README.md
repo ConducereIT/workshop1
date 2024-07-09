@@ -57,10 +57,11 @@ npm install -g genezio
 genezio login
 ```
 
-3. Deploy your project locally
+3. Start a local server
 ```bash
 genezio local
 ```
+
 ## Commands
 
 All commands are run from the root of the project, from a terminal:
