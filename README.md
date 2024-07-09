@@ -1,4 +1,4 @@
-# Custom File Generator
+# Workshop 1
 
 ## Prerequisites
 
